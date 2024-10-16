@@ -41,8 +41,9 @@ import (
 	"github.com/minio/pkg/v2/certs"
 	"github.com/minio/pkg/v2/console"
 	"github.com/minio/pkg/v2/ellipses"
-	"github.com/minio/warp/pkg"
 	"golang.org/x/net/http2"
+
+	"github.com/minio/warp/pkg"
 )
 
 type hostSelectType string
@@ -185,7 +186,8 @@ func clientTransport(ctx *cli.Context) http.RoundTripper {
 			Timeout:   10 * time.Second,
 			KeepAlive: 10 * time.Second,
 		}).DialContext,
-		MaxIdleConnsPerHost:   ctx.Int("concurrent"),
+		MaxIdleConnsPerHost:   1000, //ctx.Int("concurrent"),
+		MaxConnsPerHost:       1000,
 		WriteBufferSize:       ctx.Int("sndbuf"), // Configure beyond 4KiB default buffer size.
 		ReadBufferSize:        ctx.Int("rcvbuf"), // Configure beyond 4KiB default buffer size.
 		IdleConnTimeout:       90 * time.Second,
